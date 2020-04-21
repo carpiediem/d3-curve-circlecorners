@@ -22,9 +22,9 @@
  * @property {Point}    [_vert]   - vertex currently being drawn; the curve will not actually touch this point
  */
 
-export function CircleCorners(context, radius) {
+function CircleCorners(context, radius) {
   this._context = context;
-  this._radius = radius;
+  this._radius = radius || 1;
 }
 
 /**
@@ -35,7 +35,7 @@ export function CircleCorners(context, radius) {
  * @param  {number} distanceAlong - distance away that the output point should be, along the ray
  * @return {Point}  a new point, the specified direction and distance from `from`
  */
-export function alongSegment(from, toward, distanceAlong) {
+function alongSegment(from, toward, distanceAlong) {
   const rayAngle = Math.atan2(from.y - toward.y, from.x - toward.x);
 
   return {
@@ -51,81 +51,89 @@ export function alongSegment(from, toward, distanceAlong) {
  * @param  {number} x    - ...
  * @param  {number} y    - ...
  */
-export function arcPast(that, x, y) {
+function arcPast(that, x, y) {
   const angle = Math.abs(
     Math.atan2(that._vert.y - that._prev.y, that._vert.x - that._prev.x) -
-    Math.atan2(that._vert.y - y,            that._vert.x - x)
+      Math.atan2(that._vert.y - y, that._vert.x - x)
   );
-  const acuteAngle = angle > Math.PI ? 2*Math.PI - angle : angle;
+  const acuteAngle = angle > Math.PI ? 2 * Math.PI - angle : angle;
   const shortestRay = Math.min(
-    Math.sqrt(Math.pow(that._vert.x - that._prev.x, 2) + Math.pow(that._vert.y - that._prev.y, 2)),
-    Math.sqrt(Math.pow(that._vert.x - x           , 2) + Math.pow(that._vert.y - y           , 2))
+    Math.sqrt(
+      Math.pow(that._vert.x - that._prev.x, 2) +
+        Math.pow(that._vert.y - that._prev.y, 2)
+    ),
+    Math.sqrt(Math.pow(that._vert.x - x, 2) + Math.pow(that._vert.y - y, 2))
   );
-  const radius = Math.min( that._radius, shortestRay * Math.tan(acuteAngle/2) );
-  const anchorDistance = Math.abs(radius / Math.tan(acuteAngle/2));
-  const determinant = (that._vert.x - that._prev.x)*(that._vert.y - y)
-                    - (that._vert.x - x           )*(that._vert.y - that._prev.y);
+  const radius = Math.min(that._radius, shortestRay * Math.tan(acuteAngle / 2));
+  const anchorDistance = Math.abs(radius / Math.tan(acuteAngle / 2));
+  const determinant =
+    (that._vert.x - that._prev.x) * (that._vert.y - y) -
+    (that._vert.x - x) * (that._vert.y - that._prev.y);
   const sweepFlag = determinant < 0 ? 1 : 0;
 
-  const aIn  = alongSegment(that._vert, that._prev, anchorDistance);
-  const aOut = alongSegment(that._vert, {x, y}, anchorDistance);
+  const aIn = alongSegment(that._vert, that._prev, anchorDistance);
+  const aOut = alongSegment(that._vert, { x, y }, anchorDistance);
 
   // that._context.arcTo() doesn't work properly, so we'll modify the string directly
-  that._context._ += ` L${aIn.x} ${aIn.y} A${radius} ${radius} 0 0 ${sweepFlag} ${aOut.x} ${aOut.y}`;
+  that._context._ += `L${aIn.x},${aIn.y}A${radius},${radius},0,0,${sweepFlag},${aOut.x},${aOut.y}`;
 
   that._prev = aOut;
   that._vert = { x, y };
 }
 
 CircleCorners.prototype = {
-    areaStart: function() {
-      this._line = 0;
-    },
-    areaEnd: function() {
-      this._line = NaN;
-    },
-    lineStart: function() {
-      this._prev = { x: NaN, y: NaN };
-      this._vert = { x: NaN, y: NaN };
-      this._point = 0;
-    },
-    lineEnd: function() {
-      // No more points, so draw a straight line to the end
+  areaStart: function() {
+    this._line = 0;
+  },
+  areaEnd: function() {
+    this._line = NaN;
+  },
+  lineStart: function() {
+    this._prev = { x: NaN, y: NaN };
+    this._vert = { x: NaN, y: NaN };
+    this._point = 0;
+  },
+  lineEnd: function() {
+    // No more points, so draw a straight line to the end
+    if (this._point === 1) {
+      this._context.moveTo(this._vert.x, this._vert.y);
+    } else {
       this._context.lineTo(this._vert.x, this._vert.y);
-
-      // proceed
-      if (this._line || (this._line !== 0 && this._point === 3)) this._context.closePath();
-      this._line = 1 - this._line;
-    },
-    point: function(x, y) {
-      x = +x, y = +y;
-
-      switch (this._point) {
-        case 0:
-          this._point = 1;
-          break;
-
-        case 1:
-          this._point = 2;
-          if (this._line) {
-            this._context.lineTo(this._vert.x, this._vert.y);
-          } else {
-            this._context.moveTo(this._vert.x, this._vert.y);
-          }
-          break;
-
-        default:
-          arcPast(this, x, y);
-          return;
-      }
-
-      this._prev = this._vert;
-      this._vert = { x, y };
     }
+
+    // proceed
+    if (this._line || (this._line !== 0 && this._point === 3))
+      this._context.closePath();
+    this._line = 1 - this._line;
+  },
+  point: function(x, y) {
+    (x = +x), (y = +y);
+
+    switch (this._point) {
+      case 0:
+        this._point = 1;
+        break;
+
+      case 1:
+        this._point = 2;
+        if (this._line) {
+          this._context.lineTo(this._vert.x, this._vert.y);
+        } else {
+          this._context.moveTo(this._vert.x, this._vert.y);
+        }
+        break;
+
+      default:
+        arcPast(this, x, y);
+        return;
+    }
+
+    this._prev = this._vert;
+    this._vert = { x, y };
+  }
 };
 
 export default (function custom(radius) {
-
   function circleCorners(context) {
     return new CircleCorners(context, radius);
   }
