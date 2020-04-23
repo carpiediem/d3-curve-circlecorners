@@ -1,8 +1,8 @@
-// https://github.com/carpiediem/d3-curve-circlecorners#readme v0.1.0 Copyright 2020 Ryan SL Carpenter
+// https://github.com/carpiediem/d3-curve-circlecorners#readme v0.1.4 Copyright 2020 Ryan SL Carpenter
 (function (global, factory) {
 typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
 typeof define === 'function' && define.amd ? define(factory) :
-(global = global || self, global.d3 = factory());
+(global = global || self, global.circleCorners = factory());
 }(this, (function () { 'use strict';
 
 /**
