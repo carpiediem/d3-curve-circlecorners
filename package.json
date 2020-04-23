@@ -1,11 +1,11 @@
 {
   "name": "d3-curve-circlecorners",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "A curve function that can be passed to the d3.js line.curve and area.curve functions",
-  "main": "dist/circlecorners.min.js",
-  "unpkg": "dist/circlecorners.min.js",
-  "jsdelivr": "dist/circlecorners.min.js",
-  "module": "dist/circlecorners.min.js",
+  "main": "dist/d3-curve-circlecorners.min.js",
+  "unpkg": "dist/d3-curve-circlecorners.min.js",
+  "jsdelivr": "dist/d3-curve-circlecorners.min.js",
+  "module": "dist/d3-curve-circlecorners.min.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/carpiediem/d3-curve-circlecorners.git"
