@@ -8,7 +8,7 @@ const config = {
   ),
   output: {
     file: `dist/${meta.name}.js`,
-    name: "d3",
+    name: "circleCorners",
     format: "umd",
     indent: false,
     extend: true,
