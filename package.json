@@ -1,6 +1,6 @@
 {
   "name": "d3-curve-circlecorners",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "A curve function that can be passed to the d3.js line.curve and area.curve functions",
   "main": "dist/d3-curve-circlecorners.min.js",
   "unpkg": "dist/d3-curve-circlecorners.min.js",
