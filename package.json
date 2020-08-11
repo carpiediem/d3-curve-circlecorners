@@ -20,7 +20,7 @@
     "eslint": "6",
     "rollup": "1",
     "rollup-plugin-terser": "5",
-    "tape": "4"
+    "tape": "5"
   },
   "sideEffects": false,
   "keywords": [
