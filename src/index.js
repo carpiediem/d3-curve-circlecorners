@@ -40,7 +40,7 @@ function alongSegment(from, toward, distanceAlong) {
 
   return {
     x: from.x - distanceAlong * Math.cos(rayAngle),
-    y: from.y - distanceAlong * Math.sin(rayAngle)
+    y: from.y - distanceAlong * Math.sin(rayAngle),
   };
 }
 
@@ -65,7 +65,9 @@ function arcPast(that, x, y) {
     Math.sqrt(Math.pow(that._vert.x - x, 2) + Math.pow(that._vert.y - y, 2))
   );
   const radius = Math.min(that._radius, shortestRay * Math.tan(acuteAngle / 2));
-  const anchorDistance = Math.abs(radius / Math.tan(acuteAngle / 2));
+  const anchorDistance = acuteAngle
+    ? Math.abs(radius / Math.tan(acuteAngle / 2))
+    : 0;
   const determinant =
     (that._vert.x - that._prev.x) * (that._vert.y - y) -
     (that._vert.x - x) * (that._vert.y - that._prev.y);
@@ -82,18 +84,18 @@ function arcPast(that, x, y) {
 }
 
 CircleCorners.prototype = {
-  areaStart: function() {
+  areaStart: function () {
     this._line = 0;
   },
-  areaEnd: function() {
+  areaEnd: function () {
     this._line = NaN;
   },
-  lineStart: function() {
+  lineStart: function () {
     this._prev = { x: NaN, y: NaN };
     this._vert = { x: NaN, y: NaN };
     this._point = 0;
   },
-  lineEnd: function() {
+  lineEnd: function () {
     // No more points, so draw a straight line to the end
     if (this._point === 1) {
       this._context.moveTo(this._vert.x, this._vert.y);
@@ -106,7 +108,7 @@ CircleCorners.prototype = {
       this._context.closePath();
     this._line = 1 - this._line;
   },
-  point: function(x, y) {
+  point: function (x, y) {
     (x = +x), (y = +y);
 
     switch (this._point) {
@@ -130,7 +132,7 @@ CircleCorners.prototype = {
 
     this._prev = this._vert;
     this._vert = { x, y };
-  }
+  },
 };
 
 export default (function custom(radius) {
@@ -138,7 +140,7 @@ export default (function custom(radius) {
     return new CircleCorners(context, radius);
   }
 
-  circleCorners.radius = function(radius) {
+  circleCorners.radius = function (radius) {
     return custom(+radius);
   };
 
