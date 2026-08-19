@@ -65,13 +65,17 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add package.json package-lock.json dist
           git commit -m "chore(release): v${{ steps.bump.outputs.version }}"
-          git tag "v${{ steps.bump.outputs.version }}"
           # master may have moved since checkout (e.g. another merge landed
           # while lint/build/test were running); rebase our single release
           # commit onto the latest tip instead of racing it with a bare push.
           git fetch origin master
           git rebase origin/master
-          git push --follow-tags
+          # Tag after rebasing, so it points at the commit that actually
+          # gets pushed rather than a pre-rebase SHA. Push it by name
+          # explicitly: it's a lightweight tag, and `--follow-tags` only
+          # pushes annotated tags.
+          git tag "v${{ steps.bump.outputs.version }}"
+          git push origin master "v${{ steps.bump.outputs.version }}"
 
       - name: Publish to npm
         run: npm publish --access public
