@@ -12,14 +12,20 @@
   },
   "scripts": {
     "pretest": "rollup -c",
-    "test": "tape ./src/**/*.spec.js && eslint src"
+    "test": "tape ./src/**/*.spec.js",
+    "test:coverage": "c8 npm test",
+    "lint": "eslint src",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "devDependencies": {
     "@eslint/js": "10",
     "@rollup/plugin-terser": "^1.0.0",
+    "c8": "12",
     "d3-shape": "^3.2.0",
     "eslint": "10",
     "globals": "16",
+    "prettier": "3",
     "rollup": "2",
     "tape": "5"
   },

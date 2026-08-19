@@ -9,7 +9,7 @@ By passing it a data series and (npm publish --access publicoptionally) a corner
 ```javascript
 const lineFn = d3.line().curve(circleCorners.radius(0.5));
 const string = lineFn(data);
-path.setAttribute('d', string);
+path.setAttribute("d", string);
 ```
 
 ## Installing
@@ -21,8 +21,8 @@ If you use NPM, `npm install d3-curve-circlecorners`. Otherwise, you can referen
 Once you've imported the code, you can use it like any other d3 curve function.
 
 ```javascript
-const { line } = require('d3-shape');
-const circleCorners = require('d3-curve-circlecorners');
+const { line } = require("d3-shape");
+const circleCorners = require("d3-curve-circlecorners");
 
 const data = [
   [0, 1],
@@ -64,14 +64,14 @@ When accessing the packaged code meant for the web, be sure that you get the nec
 </svg>
 
 <script>
-  window.addEventListener('load', () => {
+  window.addEventListener("load", () => {
     const data = [
       [2, 1],
       [3, 4],
       [1, 6],
     ];
     const drawing = d3.line().curve(circleCorners.radius(0.5))(data);
-    document.getElementById('curvy').setAttribute('d', drawing);
+    document.getElementById("curvy").setAttribute("d", drawing);
   });
 </script>
 ```
