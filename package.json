@@ -24,7 +24,7 @@
     "c8": "12",
     "d3-shape": "^3.2.0",
     "eslint": "10",
-    "globals": "16",
+    "globals": "17",
     "prettier": "3",
     "rollup": "4",
     "tape": "5"
