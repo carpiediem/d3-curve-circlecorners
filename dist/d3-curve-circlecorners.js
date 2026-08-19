@@ -1,4 +1,4 @@
-// https://github.com/carpiediem/d3-curve-circlecorners#readme v0.1.9 Copyright 2026 Ryan SL Carpenter
+// https://github.com/carpiediem/d3-curve-circlecorners#readme v0.1.10 Copyright 2026 Ryan SL Carpenter
 (function (global, factory) {
 typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
 typeof define === 'function' && define.amd ? define(factory) :
