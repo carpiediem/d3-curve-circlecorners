@@ -26,7 +26,7 @@
     "eslint": "10",
     "globals": "16",
     "prettier": "3",
-    "rollup": "2",
+    "rollup": "4",
     "tape": "5"
   },
   "sideEffects": false,
