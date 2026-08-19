@@ -1,9 +1,9 @@
-// https://github.com/carpiediem/d3-curve-circlecorners#readme v0.1.5 Copyright 2022 Ryan SL Carpenter
+// https://github.com/carpiediem/d3-curve-circlecorners#readme v0.1.6 Copyright 2026 Ryan SL Carpenter
 (function (global, factory) {
 typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
 typeof define === 'function' && define.amd ? define(factory) :
 (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.circleCorners = factory());
-}(this, (function () { 'use strict';
+})(this, (function () { 'use strict';
 
 /**
  * Point type definition
@@ -81,8 +81,6 @@ function arcPast(that, x, y) {
   const sweepFlag = determinant < 0 ? 1 : 0;
 
   const aIn = alongSegment(that._vert, that._prev, anchorDistance);
-  // console.log({ radius, acuteAngle, anchorDistance, aIn });
-
   const aOut = alongSegment(that._vert, { x, y }, anchorDistance);
 
   // that._context.arcTo() doesn't work properly, so we'll modify the string directly
@@ -158,4 +156,4 @@ var index = (function custom(radius) {
 
 return index;
 
-})));
+}));
