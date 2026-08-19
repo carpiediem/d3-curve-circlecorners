@@ -11,7 +11,8 @@
     "url": "git+https://github.com/carpiediem/d3-curve-circlecorners.git"
   },
   "scripts": {
-    "pretest": "rollup -c",
+    "build": "rollup -c",
+    "pretest": "npm run build",
     "test": "tape ./src/**/*.spec.js",
     "test:coverage": "c8 npm test",
     "lint": "eslint src",
