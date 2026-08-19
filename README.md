@@ -1,5 +1,7 @@
 # d3-curve-circlecorners
 
+[![codecov](https://codecov.io/gh/carpiediem/d3-curve-circlecorners/branch/master/graph/badge.svg)](https://codecov.io/gh/carpiediem/d3-curve-circlecorners)
+
 [d3-curve-circlecorners](https://github.com/carpiediem/d3-curve-circlecorners/tree/master) is a [curve function](https://github.com/d3/d3-shape/blob/v1.3.7/README.md#curves) that can be passed to the [d3.js](https://d3js.org/) [line.curve](https://github.com/d3/d3-shape/blob/v1.3.7/README.md#line_curve) and [area.curve](https://github.com/d3/d3-shape/blob/v1.3.7/README.md#area_curve) functions.
 
 By passing it a data series and (npm publish --access publicoptionally) a corner radius, it will output a string that can be used to draw an SVG path. If no radius is specified,
@@ -9,7 +11,7 @@ By passing it a data series and (npm publish --access publicoptionally) a corner
 ```javascript
 const lineFn = d3.line().curve(circleCorners.radius(0.5));
 const string = lineFn(data);
-path.setAttribute('d', string);
+path.setAttribute("d", string);
 ```
 
 ## Installing
@@ -21,8 +23,8 @@ If you use NPM, `npm install d3-curve-circlecorners`. Otherwise, you can referen
 Once you've imported the code, you can use it like any other d3 curve function.
 
 ```javascript
-const { line } = require('d3-shape');
-const circleCorners = require('d3-curve-circlecorners');
+const { line } = require("d3-shape");
+const circleCorners = require("d3-curve-circlecorners");
 
 const data = [
   [0, 1],
@@ -64,14 +66,14 @@ When accessing the packaged code meant for the web, be sure that you get the nec
 </svg>
 
 <script>
-  window.addEventListener('load', () => {
+  window.addEventListener("load", () => {
     const data = [
       [2, 1],
       [3, 4],
       [1, 6],
     ];
     const drawing = d3.line().curve(circleCorners.radius(0.5))(data);
-    document.getElementById('curvy').setAttribute('d', drawing);
+    document.getElementById("curvy").setAttribute("d", drawing);
   });
 </script>
 ```

@@ -8,15 +8,15 @@
 /**
  * CircleCorners type definition
  * @typedef {Object} CircleCorners
- * @property {function} areaStart - triggered when ...
- * @property {function} areaEnd   - triggered when ...
+ * @property {function} areaStart - triggered before the first datum of an area's topline (or, for the baseline, right after the topline ends)
+ * @property {function} areaEnd   - triggered after the last datum of an area's baseline, closing the shape
  * @property {function} lineStart - triggered when before the first datum in a line
  * @property {function} lineEnd   - triggered when after the last datum in a line
  * @property {function} point     - triggered for each point in an array of data defining a line
  * @property {object}   _context  - 2d context of an HTML canvas element (or equivalant SVG drawing space)
  * @property {string}   _context._  draw commands to be applied to the d attribute of a path element
  * @property {number}   _radius   - corner radius to apply to each line segment intersection
- * @property {number}   [_line]   - state variable for ...
+ * @property {number}   [_line]   - state variable tracking whether the current line is part of an area (0/1, alternating between topline and baseline) or a standalone line (NaN)
  * @property {number}   [_point]  - state variable for how many points are saved as properties (vert & prev)
  * @property {Point}    [_prev]   - the point preceding the vertex; either the first point of a line or an "out" anchor
  * @property {Point}    [_vert]   - vertex currently being drawn; the curve will not actually touch this point
@@ -54,15 +54,15 @@ function alongSegment(from, toward, distanceAlong) {
 function arcPast(that, x, y) {
   const angle = Math.abs(
     Math.atan2(that._vert.y - that._prev.y, that._vert.x - that._prev.x) -
-      Math.atan2(that._vert.y - y, that._vert.x - x)
+      Math.atan2(that._vert.y - y, that._vert.x - x),
   );
   const acuteAngle = angle > Math.PI ? 2 * Math.PI - angle : angle;
   const shortestRay = Math.min(
     Math.sqrt(
       Math.pow(that._vert.x - that._prev.x, 2) +
-        Math.pow(that._vert.y - that._prev.y, 2)
+        Math.pow(that._vert.y - that._prev.y, 2),
     ),
-    Math.sqrt(Math.pow(that._vert.x - x, 2) + Math.pow(that._vert.y - y, 2))
+    Math.sqrt(Math.pow(that._vert.x - x, 2) + Math.pow(that._vert.y - y, 2)),
   );
   const radius = Math.min(that._radius, shortestRay * Math.tan(acuteAngle / 2));
   const anchorDistance = acuteAngle
@@ -109,7 +109,7 @@ CircleCorners.prototype = {
     this._line = 1 - this._line;
   },
   point: function (x, y) {
-    (x = +x), (y = +y);
+    ((x = +x), (y = +y));
 
     switch (this._point) {
       case 0:
