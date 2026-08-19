@@ -1,4 +1,4 @@
 {
   "reporter": ["lcov", "text"],
-  "exclude": ["**/*.spec.js", "rollup.config.js"]
+  "exclude": ["**/*.spec.js", "rollup.config.mjs"]
 }
