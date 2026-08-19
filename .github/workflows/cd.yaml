@@ -61,6 +61,11 @@ jobs:
           git add package.json package-lock.json dist
           git commit -m "chore(release): v${{ steps.bump.outputs.version }}"
           git tag "v${{ steps.bump.outputs.version }}"
+          # master may have moved since checkout (e.g. another merge landed
+          # while lint/build/test were running); rebase our single release
+          # commit onto the latest tip instead of racing it with a bare push.
+          git fetch origin master
+          git rebase origin/master
           git push --follow-tags
 
       - name: Publish to npm
