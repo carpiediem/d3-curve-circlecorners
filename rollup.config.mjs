@@ -1,5 +1,9 @@
+import { readFileSync } from "node:fs";
 import terser from "@rollup/plugin-terser";
-import * as meta from "./package.json";
+
+const meta = JSON.parse(
+  readFileSync(new URL("./package.json", import.meta.url)),
+);
 
 const config = {
   input: "src/index.js",
