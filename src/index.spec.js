@@ -1,5 +1,8 @@
+const vm = require("vm");
+const fs = require("fs");
+const path = require("path");
 const tape = require("tape");
-const { line } = require("d3-shape");
+const { area, line } = require("d3-shape");
 const circleCorners = require("../dist/d3-curve-circlecorners");
 
 tape("line.curve(circleCorners)(data) generates the expected path", (test) => {
@@ -97,6 +100,57 @@ tape("should not crash on overlapping segments", (test) => {
   );
   test.end();
 });
+
+tape(
+  "area.curve(circleCorners)(data) draws the topline and baseline as a single closed shape",
+  (test) => {
+    var a = area().curve(circleCorners.radius(1));
+    test.equal(
+      a([
+        [0, 1],
+        [1, 3],
+        [2, 1],
+      ]),
+      "M0,1L0.10557280900008392,1.2111456180001683A1,1,0,0,0,1.8944271909999157,1.2111456180001683L2,1L2,0L1,-7.498798913309288e-33A1,1,0,0,0,0.9999999999999999,0L0,0Z",
+    );
+    test.end();
+  },
+);
+
+tape(
+  "the built UMD bundle registers via AMD define() when available",
+  (test) => {
+    var distPath = path.join(__dirname, "../dist/d3-curve-circlecorners.js");
+    var src = fs.readFileSync(distPath, "utf8");
+    var registered;
+    var sandbox = { define: (factory) => (registered = factory()) };
+    sandbox.define.amd = true;
+    vm.createContext(sandbox);
+    // Reuse the dist file's own path as the script filename so V8/c8
+    // attribute coverage from this run to the same file as the require()
+    // above, instead of an anonymous "evalmachine" script.
+    vm.runInContext(src, sandbox, { filename: distPath });
+
+    test.equal(typeof registered, "function");
+    test.equal(typeof registered.radius, "function");
+    test.end();
+  },
+);
+
+tape(
+  "the built UMD bundle registers as a browser global when neither CommonJS nor AMD is available",
+  (test) => {
+    var distPath = path.join(__dirname, "../dist/d3-curve-circlecorners.js");
+    var src = fs.readFileSync(distPath, "utf8");
+    var sandbox = {};
+    vm.createContext(sandbox);
+    vm.runInContext(src, sandbox, { filename: distPath });
+
+    test.equal(typeof sandbox.circleCorners, "function");
+    test.equal(typeof sandbox.circleCorners.radius, "function");
+    test.end();
+  },
+);
 
 // tape(
 //   "line.curve(circleCorners)(data) should end the path into a closed shape",
