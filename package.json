@@ -6,6 +6,9 @@
   "unpkg": "dist/d3-curve-circlecorners.min.js",
   "jsdelivr": "dist/d3-curve-circlecorners.min.js",
   "module": "dist/d3-curve-circlecorners.min.js",
+  "files": [
+    "dist"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/carpiediem/d3-curve-circlecorners.git"
