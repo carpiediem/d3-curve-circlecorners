@@ -1,6 +1,10 @@
 name: Publish to npm
 
 on:
+  push:
+    branches: [master]
+    paths:
+      - "src/**"
   workflow_dispatch:
     inputs:
       version:
@@ -16,6 +20,14 @@ on:
           - preminor
           - premajor
           - prerelease
+
+# The release commit itself only touches package.json/package-lock.json/
+# dist, never src, so it can't re-trigger this via the push path. Serialize
+# runs so two src-touching merges landing close together don't race the
+# same release process.
+concurrency:
+  group: cd-publish
+  cancel-in-progress: false
 
 permissions:
   contents: write
@@ -53,7 +65,7 @@ jobs:
       - name: Bump version
         id: bump
         run: |
-          npm version "${{ inputs.version }}" --no-git-tag-version
+          npm version "${{ inputs.version || 'patch' }}" --no-git-tag-version
           echo "version=$(node -p "require('./package.json').version")" >> "$GITHUB_OUTPUT"
 
       - name: Rebuild dist for the new version
